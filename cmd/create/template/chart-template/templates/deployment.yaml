@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.fullName }}-deployment
+  labels:
+    app: {{ .Values.app.fullName }}-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.app.fullName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.fullName }}
+    spec:
+      containers:
+        - name:  {{ .Values.app.fullName }}       
+          image: {{ .Values.container.image.registry }}/hwc9169/{{.Values.app.name}}-{{.Values.app.type}}:{{ .Values.container.image.version }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.container.port}}

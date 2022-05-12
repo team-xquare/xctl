@@ -1,0 +1,13 @@
+app: 
+  fullName: {{appName}}-{{appType}}-{{appEnvironment}}
+  name: {{appName}}
+  type: {{appType}}
+  env: {{appEnvironment}}
+
+container:
+  port: {{containerPort}}
+  image:
+    registry: {{imageRegistry}}
+    version: latest
+
+host: {{environment}}-{{host}}

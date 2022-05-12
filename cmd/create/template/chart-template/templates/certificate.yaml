@@ -1,0 +1,11 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{.Values.app.fullName}}-certificate
+spec:
+  dnsNames:
+  - {{ .Values.host }}
+  issuerRef:
+    name: letsencrypt-{{ Values.app.env }}
+    kind: ClusterIssuer
+  secretName: {{ .Values.app.fullName }}-certificate
