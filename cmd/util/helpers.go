@@ -14,7 +14,7 @@ const (
 
 func RequireNoArguments(c *cobra.Command, args []string) {
 	if len(args) > 0 {
-		fatal(UsageErrorf(c, "error: unknown command %q", strings.Join(args, " ")))
+		CheckErr(UsageErrorf(c, "error: unknown command %q", strings.Join(args, " ")))
 	}
 }
 
@@ -23,7 +23,25 @@ func UsageErrorf(cmd *cobra.Command, format string, args ...interface{}) error {
 	return fmt.Errorf("%s \nSee '%s -h' for help and examples", msg, cmd.CommandPath())
 }
 
-func fatal(err error) {
-	fmt.Fprint(os.Stderr, err.Error())
-	os.Exit(DefaultErrorExitCode)
+func CheckErr(err error) {
+	if err == nil {
+		return
+	}
+
+	msg := err.Error()
+	if !strings.HasPrefix(msg, "error: ") {
+		msg = fmt.Sprintf("error: %s", msg)
+	}
+
+	fatal(msg, DefaultErrorExitCode)
+}
+
+func fatal(msg string, code int) {
+	if len(msg) > 0 {
+		if !strings.HasSuffix(msg, "\n") {
+			msg += "\n"
+		}
+		fmt.Fprint(os.Stderr, msg)
+	}
+	os.Exit(code)
 }
