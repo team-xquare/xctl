@@ -1,0 +1,17 @@
+app: 
+  fullName: {{.Name}}-{{.Type}}-{{.Environment}}
+  name: {{.Name}}
+  type: {{.Type}}
+  env: {{.Environment}}
+
+container:
+  port: {{.ContainerPort}}
+  image:
+    registry: {{.ImageRegistry}}
+    version: {{.ImageTag}}
+
+{{if eq .Environment "production"}}
+host: {{.Host}}
+{{else}}
+host: {{.Environment}}-{{.Host}}
+{{end}}
