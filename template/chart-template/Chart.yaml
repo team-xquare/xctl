@@ -1,6 +1,6 @@
 apiVersion: v2
 name: {{.Name}}-{{.Type}}-{{.Environment}}
-description: A Helm chart for {{.Name}} {{.ServiceType}}
+description: A Helm chart for {{.Name}} {{.Type}}
 
 type: application
 

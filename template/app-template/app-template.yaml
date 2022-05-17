@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{.Name}}-{{.Type}}-{{.Environment}}
+  namespace: argocd
+
+spec:
+  destination:
+    server: {{`{{ .Values.spec.destination.server }}`}} 
+    namespace: {{.Name}}-{{.Type}}-{{.Environment}}
+
+  project: {{`{{ .Values.spec.project }}`}}
+
+  source:
+    path: charts/{{.Type}}/{{.Name}}
+    repoURL: {{`{{ .Values.spec.source.repoURL }}`}}
+    targetRevision: {{`{{ .Values.spec.source.targetRevision }}`}}
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
