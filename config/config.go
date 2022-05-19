@@ -7,7 +7,7 @@ import (
 )
 
 type config struct {
-	Token string
+	GithubToken string
 }
 
 var Config config
