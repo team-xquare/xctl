@@ -1,6 +1,7 @@
 package util
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
@@ -44,4 +45,13 @@ func fatal(msg string, code int) {
 		fmt.Fprint(os.Stderr, msg)
 	}
 	os.Exit(code)
+}
+
+func PrintObject(obj interface{}) (err error) {
+	jsonObj, err := json.MarshalIndent(obj, "", " ")
+	if err != nil {
+		return
+	}
+	fmt.Fprintf(os.Stdout, "%s\n", string(jsonObj))
+	return
 }
