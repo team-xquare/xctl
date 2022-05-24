@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/google/go-github/github"
 	"github.com/spf13/cobra"
 
 	cmdutil "github.com/xctl/cmd/util"
@@ -42,7 +41,7 @@ type CreateAppOption struct {
 	CommitMessage string
 	Environment   string
 
-	Client gitops.GitOpsInterface
+	Gitops gitops.GitopsInterface
 }
 
 func NewCmdCreateApp() *cobra.Command {
@@ -99,7 +98,7 @@ func (o *CreateAppOption) Complete(cmd *cobra.Command, args []string) error {
 	default:
 		return fmt.Errorf("cannot find a specific environment name: %s", o.Environment)
 	}
-	o.Client = gitops.NewGitopsClient(client)
+	o.Gitops = gitops.NewGitops(client)
 
 	return nil
 }
@@ -125,7 +124,7 @@ func (o *CreateAppOption) Run() error {
 	if err != nil {
 		return err
 	}
-	err = o.Client.Application().Create(context.Background(), app)
+	err = o.Gitops.Application().Create(context.Background(), app)
 	if err != nil {
 		return err
 	}
@@ -142,6 +141,7 @@ func (o *CreateAppOption) createApplication() (*api.Application, error) {
 		ImageRegistry: o.ImageRegistry,
 		ImageTag:      o.ImageTag,
 		ContainerPort: o.ContainerPort,
+		Environment:   o.Environment,
 	}
 
 	return app, nil

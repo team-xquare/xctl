@@ -6,5 +6,6 @@ type Application struct {
 	Host          string
 	ImageRegistry string
 	ImageTag      string
+	Environment   string
 	ContainerPort int32
 }
