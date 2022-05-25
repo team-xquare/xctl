@@ -48,7 +48,7 @@ func fatal(msg string, code int) {
 }
 
 func PrintObject(obj interface{}) (err error) {
-	jsonObj, err := json.Marshal(obj)
+	jsonObj, err := json.MarshalIndent(obj, "", "  ")
 	if err != nil {
 		return
 	}
