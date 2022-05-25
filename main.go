@@ -5,13 +5,8 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package main
 
 import (
-	"github.com/xctl/cmd"
-	"github.com/xctl/config"
+	"github.com/xctl/pkg/cmd"
 )
-
-func init() {
-	config.MustLoadConfig()
-}
 
 func main() {
 	cmd.Execute()

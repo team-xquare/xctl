@@ -3,7 +3,7 @@ package create
 import (
 	"github.com/spf13/cobra"
 
-	cmdutil "github.com/xctl/cmd/util"
+	cmdutil "github.com/xctl/pkg/cmd/util"
 )
 
 // createCmd represents the create command

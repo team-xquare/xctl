@@ -7,16 +7,16 @@ import (
 
 	"github.com/spf13/cobra"
 
-	cmdutil "github.com/xctl/cmd/util"
 	"github.com/xctl/pkg/api"
+	cmdutil "github.com/xctl/pkg/cmd/util"
 	gitops "github.com/xctl/pkg/gitops"
 	"github.com/xctl/pkg/gitops/github"
 )
 
 var (
-	appDescription = `
+	cmdDescription = `
 	Create and deploy an application with the specified name.`
-	appExample = `
+	cmdExample = `
 	#Create and deploy an application named testapp
 	xctl create app testapp
 	
@@ -30,7 +30,7 @@ var (
 	ValidHostnameRegex = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
 )
 
-type CreateAppOption struct {
+type CreateAppOptions struct {
 	Name          string
 	Command       []string
 	Type          string
@@ -44,13 +44,24 @@ type CreateAppOption struct {
 	Gitops gitops.GitopsInterface
 }
 
+func NewCreateAppOption() *CreateAppOptions {
+	return &CreateAppOptions{
+		Type:          "backend",
+		Host:          "api.xquare.app",
+		ImageRegistry: "registry.hub.docker.com",
+		ImageTag:      "latest",
+		ContainerPort: 8080,
+		Environment:   "staging",
+	}
+}
+
 func NewCmdCreateApp() *cobra.Command {
 	o := NewCreateAppOption()
 	cmd := &cobra.Command{
 		Use:     "app NAME -- [COMMAND] [args...]",
-		Short:   appDescription,
-		Long:    appDescription,
-		Example: appExample,
+		Short:   cmdDescription,
+		Long:    cmdDescription,
+		Example: cmdExample,
 		Run: func(cmd *cobra.Command, args []string) {
 			cmdutil.CheckErr(o.Complete(cmd, args))
 			cmdutil.CheckErr(o.Validate())
@@ -68,18 +79,7 @@ func NewCmdCreateApp() *cobra.Command {
 	return cmd
 }
 
-func NewCreateAppOption() *CreateAppOption {
-	return &CreateAppOption{
-		Type:          "backend",
-		Host:          "api.xquare.app",
-		ImageRegistry: "registry.hub.docker.com",
-		ImageTag:      "latest",
-		ContainerPort: 8080,
-		Environment:   "staging",
-	}
-}
-
-func (o *CreateAppOption) Complete(cmd *cobra.Command, args []string) error {
+func (o *CreateAppOptions) Complete(cmd *cobra.Command, args []string) error {
 	name, err := NameFromCommandArgs(cmd, args)
 	if err != nil {
 		return err
@@ -89,21 +89,25 @@ func (o *CreateAppOption) Complete(cmd *cobra.Command, args []string) error {
 		o.Command = args[1:]
 	}
 
-	var client github.GithubClient
+	var repo string
 	switch o.Environment {
 	case "staging":
-		client = github.NewGithubClient(github.StagingRepo)
+		repo = github.StagingRepo
 	case "production":
-		client = github.NewGithubClient(github.ProductionRepo)
+		repo = github.ProductionRepo
 	default:
 		return fmt.Errorf("cannot find a specific environment name: %s", o.Environment)
+	}
+	client, err := github.NewGithubClient(repo)
+	if err != nil {
+		return err
 	}
 	o.Gitops = gitops.NewGitops(client)
 
 	return nil
 }
 
-func (o *CreateAppOption) Validate() error {
+func (o *CreateAppOptions) Validate() error {
 	if o.ContainerPort < 0 || o.ContainerPort > 65535 {
 		return fmt.Errorf("port number cannot out of range 0 to 65535")
 	}
@@ -119,7 +123,7 @@ func (o *CreateAppOption) Validate() error {
 	return nil
 }
 
-func (o *CreateAppOption) Run() error {
+func (o *CreateAppOptions) Run() error {
 	app, err := o.createApplication()
 	if err != nil {
 		return err
@@ -133,7 +137,7 @@ func (o *CreateAppOption) Run() error {
 	return nil
 }
 
-func (o *CreateAppOption) createApplication() (*api.Application, error) {
+func (o *CreateAppOptions) createApplication() (*api.Application, error) {
 	app := &api.Application{
 		Name:          o.Name,
 		Type:          o.Type,
