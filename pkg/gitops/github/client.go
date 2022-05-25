@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/google/go-github/github"
-	"github.com/xctl/config"
+	"github.com/xctl/pkg/gitops/config"
 	"golang.org/x/oauth2"
 )
 
@@ -29,8 +29,14 @@ type GithubClient struct {
 	CommitterEmail string
 }
 
-func NewGithubClient(repo string) *GithubClient {
-	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: config.Config.GithubToken})
+func NewGithubClient(repo string) (*GithubClient, error) {
+	credential, err := config.GetCredential()
+	if err != nil {
+		return nil, err
+	}
+	ts := oauth2.StaticTokenSource(&oauth2.Token{
+		AccessToken: credential.GithubToken,
+	})
 	tc := oauth2.NewClient(context.Background(), ts)
 	client := github.NewClient(tc)
 
@@ -40,7 +46,7 @@ func NewGithubClient(repo string) *GithubClient {
 		RepoOwner:      DefaultRepoOwner,
 		CommitterName:  DefaultCommitterName,
 		CommitterEmail: DefaultCommitterEmail,
-	}
+	}, nil
 }
 
 func (g *GithubClient) GetRef(ctx context.Context) (ref *github.Reference, err error) {
