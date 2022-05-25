@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/cobra"
 	create "github.com/xctl/pkg/cmd/create"
 	get "github.com/xctl/pkg/cmd/get"
+	set "github.com/xctl/pkg/cmd/set"
 	cmdutil "github.com/xctl/pkg/cmd/util"
 )
 
@@ -28,6 +29,7 @@ func NewCmdRoot() *cobra.Command {
 
 	cmd.AddCommand(create.NewCmdCreate())
 	cmd.AddCommand(get.NewCmdGet())
+	cmd.AddCommand(set.NewCmdSet())
 
 	cmd.CompletionOptions.DisableDefaultCmd = true
 
