@@ -91,6 +91,7 @@ func (c *applications) createTreeEntries(ctx context.Context, app *api.Applicati
 
 			fileName := strings.Join(strings.Split(path, "/")[2:], "/")
 			content := buf.String()
+			buf.Reset()
 			var entryPath string
 			if fileName == "app-template.yaml" {
 				entryPath = fmt.Sprintf("apps/templates/%s/%s", app.Type, fmt.Sprintf("app-%s-%s.yaml", app.Name, app.Type))
@@ -101,8 +102,8 @@ func (c *applications) createTreeEntries(ctx context.Context, app *api.Applicati
 			entries = append(entries, github.TreeEntry{
 				Path:    github.String(entryPath),
 				Content: github.String(content),
-				Mode:    github.String("blob"),
-				Type:    github.String("100644"),
+				Type:    github.String("blob"),
+				Mode:    github.String("100644"),
 			})
 			return nil
 		})
