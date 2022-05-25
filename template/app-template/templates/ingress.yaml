@@ -11,7 +11,7 @@ spec:
 
   routes:
   - conditions:
-    - prefix: /
+    - prefix: {{`{{.Values.ingress.prefix}}`}}
     {{`{{if eq .Values.app.type "staging"}}`}}
     permitInsecure: true  
     {{`{{end}}`}}

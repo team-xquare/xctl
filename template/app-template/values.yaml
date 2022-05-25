@@ -10,6 +10,9 @@ container:
     registry: {{.ImageRegistry}}
     version: {{.ImageTag}}
 
+ingress:
+  prefix: {{.Prefix}}
+
 {{if eq .Environment "production"}}
 host: {{.Host}}
 {{else}}

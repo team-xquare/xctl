@@ -8,4 +8,5 @@ type Application struct {
 	ImageTag      string
 	Environment   string
 	ContainerPort int32
+	Prefix        string
 }

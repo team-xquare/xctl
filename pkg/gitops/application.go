@@ -83,7 +83,15 @@ func (c *applications) createTreeEntries(ctx context.Context, app *api.Applicati
 				ImageTag      string
 				ContainerPort int32
 				Environment   string
-			}{app.Name, app.Type, app.Host, app.ImageRegistry, app.ImageTag, app.ContainerPort, app.Environment}
+				Prefix        string
+			}{app.Name,
+				app.Type,
+				app.Host,
+				app.ImageRegistry,
+				app.ImageTag,
+				app.ContainerPort,
+				app.Environment,
+				app.Prefix}
 			err = tmpl.Execute(&buf, &data)
 			if err != nil {
 				return err

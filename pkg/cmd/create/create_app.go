@@ -40,6 +40,7 @@ type CreateAppOptions struct {
 	ContainerPort int32
 	CommitMessage string
 	Environment   string
+	Prefix        string
 
 	Gitops gitops.GitopsInterface
 }
@@ -50,8 +51,11 @@ func NewCreateAppOption() *CreateAppOptions {
 		Host:          "api.xquare.app",
 		ImageRegistry: "registry.hub.docker.com",
 		ImageTag:      "latest",
+		/* 도커 파일의 외부 포트와 연결되는 포트.
+		예를 들어 리액트 애플리케이션을 배포하는 경우, 리액트의 기본 포트인 3000을 지정해주면 된다.*/
 		ContainerPort: 8080,
 		Environment:   "staging",
+		Prefix:        "/",
 	}
 }
 
@@ -74,6 +78,7 @@ func NewCmdCreateApp() *cobra.Command {
 	cmd.Flags().StringVarP(&o.ImageRegistry, "registry", "r", o.ImageRegistry, "The container registry url. Default is registry.hub.docker.com")
 	cmd.Flags().StringVarP(&o.Environment, "environment", "e", o.Environment, "The environment to create an application. Default is staging")
 	cmd.Flags().StringVar(&o.ImageTag, "tag", o.ImageTag, "The tag name of a image at start. Default is latest")
+	cmd.Flags().StringVarP(&o.Prefix, "prefix", "p", o.Prefix, "The prefix for service routing. Default is /")
 	cmd.Flags().Int32Var(&o.ContainerPort, "port", o.ContainerPort, "The port number to run in Docker Container. Default is 8080")
 
 	return cmd
@@ -146,6 +151,7 @@ func (o *CreateAppOptions) createApplication() (*api.Application, error) {
 		ImageTag:      o.ImageTag,
 		ContainerPort: o.ContainerPort,
 		Environment:   o.Environment,
+		Prefix:        o.Prefix,
 	}
 
 	return app, nil
