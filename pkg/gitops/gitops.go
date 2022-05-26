@@ -1,9 +1,13 @@
 package gitops
 
-import "github.com/xctl/pkg/gitops/github"
+import (
+	"github.com/xctl/pkg/api"
+	"github.com/xctl/pkg/gitops/application"
+	"github.com/xctl/pkg/gitops/github"
+)
 
 type GitopsInterface interface {
-	Application() ApplicationInterface
+	Application(app *api.Application) application.ApplicationInterface
 }
 
 type Gitops struct {
@@ -16,6 +20,6 @@ func NewGitops(client *github.GithubClient) *Gitops {
 	}
 }
 
-func (c *Gitops) Application() ApplicationInterface {
-	return newApplication(c)
+func (c *Gitops) Application(app *api.Application) application.ApplicationInterface {
+	return application.NewApplications(c.client, app)
 }

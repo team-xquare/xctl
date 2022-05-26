@@ -1,5 +1,13 @@
 package api
 
+const (
+	Backend  = "backend"
+	Frontend = "frontend"
+
+	Production = "production"
+	Staging    = "staging"
+)
+
 type Application struct {
 	Name          string
 	Type          string

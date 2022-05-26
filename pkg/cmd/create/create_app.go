@@ -94,23 +94,7 @@ func (o *CreateAppOptions) Complete(cmd *cobra.Command, args []string) error {
 		o.Command = args[1:]
 	}
 
-	var repo string
-	if o.Environment == "stag" {
-		o.Environment = "staging"
-	}
-	if o.Environment == "prod" {
-		o.Environment = "production"
-	}
-
-	switch o.Environment {
-	case "staging":
-		repo = github.StagingRepo
-	case "production":
-		repo = github.ProductionRepo
-	default:
-		return fmt.Errorf("cannot find a specific environment name: %s", o.Environment)
-	}
-	client, err := github.NewGithubClient(repo)
+	client, err := github.NewGithubClient(o.Environment)
 	if err != nil {
 		return err
 	}
@@ -140,7 +124,7 @@ func (o *CreateAppOptions) Run() error {
 	if err != nil {
 		return err
 	}
-	err = o.Gitops.Application().Create(context.Background(), app)
+	err = o.Gitops.Application(app).Create(context.Background())
 	if err != nil {
 		return err
 	}

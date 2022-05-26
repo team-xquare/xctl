@@ -9,6 +9,7 @@ import (
 
 	"github.com/spf13/cobra"
 	create "github.com/xctl/pkg/cmd/create"
+	delete "github.com/xctl/pkg/cmd/delete"
 	get "github.com/xctl/pkg/cmd/get"
 	set "github.com/xctl/pkg/cmd/set"
 	cmdutil "github.com/xctl/pkg/cmd/util"
@@ -28,6 +29,7 @@ func NewCmdRoot() *cobra.Command {
 	}
 
 	cmd.AddCommand(create.NewCmdCreate())
+	cmd.AddCommand(delete.NewCmdDelete())
 	cmd.AddCommand(get.NewCmdGet())
 	cmd.AddCommand(set.NewCmdSet())
 
