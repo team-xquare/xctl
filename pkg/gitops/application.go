@@ -3,6 +3,7 @@ package gitops
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -12,12 +13,14 @@ import (
 
 	"github.com/google/go-github/github"
 	"github.com/xctl/pkg/api"
+	cmdutil "github.com/xctl/pkg/cmd/util"
 )
 
 var appTemplatePath = "template/app-template"
 
 type ApplicationInterface interface {
 	Create(ctx context.Context, app *api.Application) error
+	Get(ctx context.Context) ([]*api.Application, []*api.Application, error)
 }
 
 type applications struct {
@@ -55,7 +58,14 @@ func (c *applications) Create(ctx context.Context, app *api.Application) error {
 }
 
 func (c *applications) createTreeEntries(ctx context.Context, app *api.Application) ([]github.TreeEntry, error) {
-	var entries []github.TreeEntry
+	var entries = []github.TreeEntry{}
+	entries = append(entries, github.TreeEntry{
+		Path:    github.String(fmt.Sprintf("resource/app-%s-%s.json", app.Name, app.Type)),
+		Mode:    github.String("100644"),
+		Type:    github.String("blob"),
+		Content: github.String(cmdutil.MarshalObject(app)),
+	})
+
 	var buf bytes.Buffer
 
 	err := filepath.Walk(appTemplatePath,
@@ -116,4 +126,44 @@ func (c *applications) createTreeEntries(ctx context.Context, app *api.Applicati
 			return nil
 		})
 	return entries, err
+}
+
+func (c *applications) Get(ctx context.Context) (frontend []*api.Application, backend []*api.Application, err error) {
+	directoryContent, err := c.getDirectoryContent(ctx, "resource")
+	if err != nil {
+		return nil, nil, err
+	}
+	for _, content := range directoryContent {
+		fileContent, err := c.getFileContent(ctx, *content.Path)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		var app *api.Application
+		err = json.Unmarshal(fileContent, &app)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		if strings.HasSuffix(*content.Path, "frontend.json") {
+			frontend = append(frontend, app)
+		} else if strings.HasSuffix(*content.Path, "backend.json") {
+			backend = append(backend, app)
+		}
+	}
+	return frontend, backend, nil
+}
+
+func (c *applications) getDirectoryContent(ctx context.Context, path string) ([]*github.RepositoryContent, error) {
+	_, directoryContent, err := c.gitops.client.GetContents(ctx, path)
+	return directoryContent, err
+}
+
+func (c *applications) getFileContent(ctx context.Context, path string) ([]byte, error) {
+	fileContent, _, err := c.gitops.client.GetContents(ctx, path)
+	if err != nil {
+		return nil, err
+	}
+	content, err := fileContent.GetContent()
+	return []byte(content), err
 }

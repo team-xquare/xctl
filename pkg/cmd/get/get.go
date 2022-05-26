@@ -23,6 +23,7 @@ func NewCmdGet() *cobra.Command {
 	}
 
 	cmd.AddCommand(NewCmdGetCredential())
+	cmd.AddCommand(NewCmdGetApp())
 
 	return cmd
 }

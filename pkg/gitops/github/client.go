@@ -79,13 +79,18 @@ func (g *GithubClient) CreateCommit(ctx context.Context, message string, tree *g
 	return
 }
 
+func (g *GithubClient) CreateTreeFromEntries(ctx context.Context, ref *github.Reference, entries []github.TreeEntry) (tree *github.Tree, err error) {
+	tree, _, err = g.Client.Git.CreateTree(ctx, g.RepoOwner, g.Repo, *ref.Object.SHA, entries)
+	return tree, err
+}
+
 func (g *GithubClient) UpdateRef(ctx context.Context, ref *github.Reference, newCommit *github.Commit) (err error) {
 	ref.Object.SHA = newCommit.SHA
 	_, _, err = g.Client.Git.UpdateRef(ctx, g.RepoOwner, g.Repo, ref, false)
 	return
 }
 
-func (g *GithubClient) CreateTreeFromEntries(ctx context.Context, ref *github.Reference, entries []github.TreeEntry) (tree *github.Tree, err error) {
-	tree, _, err = g.Client.Git.CreateTree(ctx, g.RepoOwner, g.Repo, *ref.Object.SHA, entries)
-	return tree, err
+func (g *GithubClient) GetContents(ctx context.Context, path string) (*github.RepositoryContent, []*github.RepositoryContent, error) {
+	fileContent, directoryContent, _, err := g.Client.Repositories.GetContents(ctx, g.RepoOwner, g.Repo, path, nil)
+	return fileContent, directoryContent, err
 }
