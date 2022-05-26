@@ -47,11 +47,15 @@ func fatal(msg string, code int) {
 	os.Exit(code)
 }
 
-func PrintObject(obj interface{}) (err error) {
+func MarshalObject(obj interface{}) string {
 	jsonObj, err := json.MarshalIndent(obj, "", "  ")
 	if err != nil {
-		return
+		return ""
 	}
-	fmt.Fprintf(os.Stdout, "%s\n", string(jsonObj))
-	return
+	return string(jsonObj)
+}
+
+func PrintObject(obj interface{}) {
+	jsonObj := MarshalObject(obj)
+	fmt.Fprintf(os.Stdout, "%s\n", jsonObj)
 }
