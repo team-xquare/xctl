@@ -55,24 +55,7 @@ func NewCmdGetApp() *cobra.Command {
 }
 
 func (o *GetAppOptions) Complete(cmd *cobra.Command, args []string) error {
-	var repo string
-	if o.Environment == "stag" {
-		o.Environment = "staging"
-	}
-	if o.Environment == "prod" {
-		o.Environment = "production"
-	}
-
-	switch o.Environment {
-	case "staging":
-		repo = github.StagingRepo
-	case "production":
-		repo = github.StagingRepo
-	default:
-		return fmt.Errorf("cannot find a specific environment name: %s", o.Environment)
-	}
-
-	client, err := github.NewGithubClient(repo)
+	client, err := github.NewGithubClient(o.Environment)
 	if err != nil {
 		return err
 	}
@@ -86,15 +69,18 @@ func (o *GetAppOptions) Validate() error {
 }
 
 func (o *GetAppOptions) Run() error {
-	frontend, backend, err := o.Gitops.Application().Get(context.Background())
+	fmt.Printf("Environemnt: %s\n", o.Environment)
+	frontend, err := o.Gitops.Application(nil).GetFrontend(context.Background())
 	if err != nil {
 		return err
 	}
-	fmt.Printf("Environemnt: %s\n", o.Environment)
-
 	fmt.Println("frontend applications")
 	o.printApplications(frontend)
 
+	backend, err := o.Gitops.Application(nil).GetBackend(context.Background())
+	if err != nil {
+		return err
+	}
 	fmt.Println("backend applications")
 	o.printApplications(backend)
 	return nil

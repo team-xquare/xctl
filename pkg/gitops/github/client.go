@@ -2,9 +2,10 @@ package github
 
 import (
 	"context"
+	"fmt"
 	"time"
 
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v45/github"
 	"github.com/xctl/pkg/gitops/config"
 	"golang.org/x/oauth2"
 )
@@ -29,7 +30,25 @@ type GithubClient struct {
 	CommitterEmail string
 }
 
-func NewGithubClient(repo string) (*GithubClient, error) {
+func NewGithubClient(environment string) (*GithubClient, error) {
+	client, err := getClientFromCredential()
+	if err != nil {
+		return nil, err
+	}
+	repo, err := selectRepository(environment)
+	if err != nil {
+		return nil, err
+	}
+	return &GithubClient{
+		Client:         client,
+		Repo:           repo,
+		RepoOwner:      DefaultRepoOwner,
+		CommitterName:  DefaultCommitterName,
+		CommitterEmail: DefaultCommitterEmail,
+	}, nil
+}
+
+func getClientFromCredential() (*github.Client, error) {
 	credential, err := config.GetCredential()
 	if err != nil {
 		return nil, err
@@ -39,14 +58,25 @@ func NewGithubClient(repo string) (*GithubClient, error) {
 	})
 	tc := oauth2.NewClient(context.Background(), ts)
 	client := github.NewClient(tc)
+	return client, nil
+}
 
-	return &GithubClient{
-		Client:         client,
-		Repo:           repo,
-		RepoOwner:      DefaultRepoOwner,
-		CommitterName:  DefaultCommitterName,
-		CommitterEmail: DefaultCommitterEmail,
-	}, nil
+func selectRepository(environment string) (string, error) {
+	if environment == "stag" {
+		environment = "staging"
+	}
+	if environment == "prod" {
+		environment = "production"
+	}
+
+	switch environment {
+	case "staging":
+		return StagingRepo, nil
+	case "production":
+		return ProductionRepo, nil
+	default:
+		return "", fmt.Errorf("cannot find a specific environment name: %s", environment)
+	}
 }
 
 func (g *GithubClient) GetRef(ctx context.Context) (ref *github.Reference, err error) {
@@ -59,7 +89,7 @@ func (g *GithubClient) GetRef(ctx context.Context) (ref *github.Reference, err e
 }
 
 func (g *GithubClient) GetHeadFromRef(ctx context.Context, ref *github.Reference) (head *github.RepositoryCommit, err error) {
-	head, _, err = g.Client.Repositories.GetCommit(ctx, g.RepoOwner, g.Repo, *ref.Object.SHA)
+	head, _, err = g.Client.Repositories.GetCommit(ctx, g.RepoOwner, g.Repo, *ref.Object.SHA, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +101,7 @@ func (g *GithubClient) GetHeadFromRef(ctx context.Context, ref *github.Reference
 func (g *GithubClient) CreateCommit(ctx context.Context, message string, tree *github.Tree, head *github.Commit) (newCommit *github.Commit, err error) {
 	date := time.Now()
 	author := &github.CommitAuthor{Date: &date, Name: &g.CommitterName, Email: &g.CommitterEmail}
-	commit := &github.Commit{Author: author, Message: &message, Tree: tree, Parents: []github.Commit{*head}}
+	commit := &github.Commit{Author: author, Message: &message, Tree: tree, Parents: []*github.Commit{head}}
 	newCommit, _, err = g.Client.Git.CreateCommit(ctx, g.RepoOwner, g.Repo, commit)
 	if err != nil {
 		return nil, err
@@ -79,9 +109,9 @@ func (g *GithubClient) CreateCommit(ctx context.Context, message string, tree *g
 	return
 }
 
-func (g *GithubClient) CreateTreeFromEntries(ctx context.Context, ref *github.Reference, entries []github.TreeEntry) (tree *github.Tree, err error) {
+func (g *GithubClient) CreateTreeFromEntries(ctx context.Context, ref *github.Reference, entries []*github.TreeEntry) (tree *github.Tree, err error) {
 	tree, _, err = g.Client.Git.CreateTree(ctx, g.RepoOwner, g.Repo, *ref.Object.SHA, entries)
-	return tree, err
+	return
 }
 
 func (g *GithubClient) UpdateRef(ctx context.Context, ref *github.Reference, newCommit *github.Commit) (err error) {
@@ -93,4 +123,9 @@ func (g *GithubClient) UpdateRef(ctx context.Context, ref *github.Reference, new
 func (g *GithubClient) GetContents(ctx context.Context, path string) (*github.RepositoryContent, []*github.RepositoryContent, error) {
 	fileContent, directoryContent, _, err := g.Client.Repositories.GetContents(ctx, g.RepoOwner, g.Repo, path, nil)
 	return fileContent, directoryContent, err
+}
+
+func (g *GithubClient) GetTree(ctx context.Context, ref *github.Reference) (*github.Tree, error) {
+	tree, _, err := g.Client.Git.GetTree(ctx, g.RepoOwner, g.Repo, *ref.Object.SHA, true)
+	return tree, err
 }
