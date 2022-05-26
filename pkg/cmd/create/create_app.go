@@ -95,6 +95,13 @@ func (o *CreateAppOptions) Complete(cmd *cobra.Command, args []string) error {
 	}
 
 	var repo string
+	if o.Environment == "stag" {
+		o.Environment = "staging"
+	}
+	if o.Environment == "prod" {
+		o.Environment = "production"
+	}
+
 	switch o.Environment {
 	case "staging":
 		repo = github.StagingRepo
