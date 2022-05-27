@@ -33,15 +33,17 @@ func (c *applications) getApplication(ctx context.Context, serviceType string) (
 			return nil, err
 		}
 
-		var app *api.Application
-		err = json.Unmarshal(fileContent, &app)
-		if err != nil {
-			return nil, err
-		}
-		if serviceType == "" {
-			apps = append(apps, app)
-		} else if strings.HasSuffix(*content.Path, fmt.Sprintf("%s.json", serviceType)) {
-			apps = append(apps, app)
+		if strings.HasSuffix(*content.Path, ".json") {
+			var app *api.Application
+			err = json.Unmarshal(fileContent, &app)
+			if err != nil {
+				return nil, err
+			}
+			if serviceType == "" {
+				apps = append(apps, app)
+			} else if strings.HasSuffix(*content.Path, fmt.Sprintf("%s.json", serviceType)) {
+				apps = append(apps, app)
+			}
 		}
 	}
 	return apps, nil

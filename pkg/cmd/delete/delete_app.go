@@ -7,6 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/xctl/pkg/api"
 	cmdutil "github.com/xctl/pkg/cmd/util"
 	gitops "github.com/xctl/pkg/gitops"
 	"github.com/xctl/pkg/gitops/github"
@@ -28,6 +29,7 @@ type DeleteAppOptions struct {
 	Name        string
 	Command     []string
 	Environment string
+	environment string
 	Type        string
 
 	Gitops gitops.GitopsInterface
@@ -36,6 +38,7 @@ type DeleteAppOptions struct {
 func NewDeleteAppOptions() *DeleteAppOptions {
 	return &DeleteAppOptions{
 		Environment: "staging",
+		Type:        "backend",
 	}
 }
 
@@ -54,6 +57,7 @@ func NewCmdDeleteApp() *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&o.Environment, "environment", "e", o.Environment, "The environment to create an application. Default is staging")
+	cmd.Flags().StringVarP(&o.Type, "type", "t", o.Type, "The type of service. default is backend")
 
 	return cmd
 }
@@ -63,12 +67,27 @@ func (o *DeleteAppOptions) Complete(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+	if !strings.HasPrefix(name, "app-") {
+		name = "app-" + name
+	}
+	if !strings.HasSuffix(name, "-"+o.Type) {
+		name = name + "-" + o.Type
+	}
+
 	o.Name = name
 	if len(args) > 1 {
 		o.Command = args[1:]
 	}
 
-	o.Type = strings.Split(name, "-")[len(strings.Split(name, "-"))-1]
+	o.Type, err = api.CheckApplicationType(o.Type)
+	if err != nil {
+		return err
+	}
+
+	o.Environment, err = api.CheckApplicationEnvironment(o.Environment)
+	if err != nil {
+		return err
+	}
 
 	client, err := github.NewGithubClient(o.Environment)
 	if err != nil {
