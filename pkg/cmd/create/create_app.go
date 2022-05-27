@@ -94,6 +94,16 @@ func (o *CreateAppOptions) Complete(cmd *cobra.Command, args []string) error {
 		o.Command = args[1:]
 	}
 
+	o.Type, err = api.CheckApplicationType(o.Type)
+	if err != nil {
+		return err
+	}
+
+	o.Environment, err = api.CheckApplicationEnvironment(o.Environment)
+	if err != nil {
+		return err
+	}
+
 	client, err := github.NewGithubClient(o.Environment)
 	if err != nil {
 		return err
@@ -116,7 +126,29 @@ func (o *CreateAppOptions) Validate() error {
 		return fmt.Errorf("require valid host name (%s)", o.Host)
 	}
 
+	isExist, err := o.isExistApplicationName()
+	if err != nil {
+		return err
+	}
+	if isExist {
+		return fmt.Errorf("already exist a specific application name: %s", o.Name)
+	}
+
 	return nil
+}
+
+func (o *CreateAppOptions) isExistApplicationName() (bool, error) {
+	apps, err := o.Gitops.Application(nil).Get(context.Background())
+	if err != nil {
+		return true, err
+	}
+
+	for _, app := range apps {
+		if fmt.Sprintf("app-%s-%s", app.Name, app.Type) == o.Name {
+			return true, nil
+		}
+	}
+	return false, nil
 }
 
 func (o *CreateAppOptions) Run() error {
@@ -128,7 +160,6 @@ func (o *CreateAppOptions) Run() error {
 	if err != nil {
 		return err
 	}
-
 	cmdutil.PrintObject(app)
 	return nil
 }
