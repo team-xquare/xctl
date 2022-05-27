@@ -2,10 +2,10 @@ package github
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/google/go-github/v45/github"
+	"github.com/xctl/pkg/api"
 	"github.com/xctl/pkg/gitops/config"
 	"golang.org/x/oauth2"
 )
@@ -35,10 +35,8 @@ func NewGithubClient(environment string) (*GithubClient, error) {
 	if err != nil {
 		return nil, err
 	}
-	repo, err := selectRepository(environment)
-	if err != nil {
-		return nil, err
-	}
+	repo := selectRepository(environment)
+
 	return &GithubClient{
 		Client:         client,
 		Repo:           repo,
@@ -61,21 +59,14 @@ func getClientFromCredential() (*github.Client, error) {
 	return client, nil
 }
 
-func selectRepository(environment string) (string, error) {
-	if environment == "stag" {
-		environment = "staging"
-	}
-	if environment == "prod" {
-		environment = "production"
-	}
-
+func selectRepository(environment string) string {
 	switch environment {
-	case "staging":
-		return StagingRepo, nil
-	case "production":
-		return ProductionRepo, nil
+	case api.Backend:
+		return StagingRepo
+	case api.Frontend:
+		return ProductionRepo
 	default:
-		return "", fmt.Errorf("cannot find a specific environment name: %s", environment)
+		return StagingRepo
 	}
 }
 

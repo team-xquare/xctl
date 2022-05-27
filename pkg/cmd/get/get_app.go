@@ -54,7 +54,12 @@ func NewCmdGetApp() *cobra.Command {
 	return cmd
 }
 
-func (o *GetAppOptions) Complete(cmd *cobra.Command, args []string) error {
+func (o *GetAppOptions) Complete(cmd *cobra.Command, args []string) (err error) {
+	o.Environment, err = api.CheckApplicationEnvironment(o.Environment)
+	if err != nil {
+		return err
+	}
+
 	client, err := github.NewGithubClient(o.Environment)
 	if err != nil {
 		return err
