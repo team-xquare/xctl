@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"runtime"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -58,4 +59,21 @@ func MarshalObject(obj interface{}) string {
 func PrintObject(obj interface{}) {
 	jsonObj := MarshalObject(obj)
 	fmt.Fprintf(os.Stdout, "%s\n", jsonObj)
+}
+
+func GetHomeDir() string {
+	if runtime.GOOS == "windows" {
+		home := os.Getenv("HOMEDRIVE") + os.Getenv("HOMEPATH")
+		if home == "" {
+			home = os.Getenv("USERPROFILE")
+		}
+		home = strings.Replace(home, "\\", "/", -1)
+		return home
+	} else if runtime.GOOS == "linux" {
+		home := os.Getenv("XDG_CONFIG_HOME")
+		if home != "" {
+			return home
+		}
+	}
+	return os.Getenv("HOME")
 }

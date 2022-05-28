@@ -4,10 +4,11 @@ import (
 	"context"
 
 	"github.com/xctl/pkg/api"
+	"github.com/xctl/pkg/gitops/config"
 	"github.com/xctl/pkg/gitops/github"
 )
 
-var appTemplatePath = "template/app-template"
+var appTemplatePath = config.CredentialDir + "/template/app-template"
 
 type ApplicationInterface interface {
 	Create(ctx context.Context) error
