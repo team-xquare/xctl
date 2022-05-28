@@ -1,0 +1,41 @@
+name: Build and Deploy CLI Application
+
+on:
+  push:
+    tags:
+      - v*.*.*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+
+      - name: Build
+        env:
+          VERSION: ${{ github.ref }}
+        run: |
+          GOOS=windows GOARCH=amd64 go build -o xctl.$VERSION-windows-amd64
+          GOOS=linux GOARCH=amd64 go build -o xctl.$VERSION-linux-amd64
+          GOOS=darwin GOARCH=amd64 go build -o xctl.$VERSION-darwin-amd64
+          GOOS=darwin GOARCH=arm64 go build -o xctl.$VERSION-darwin-arm64
+          tar -zcvf xctl.$VERSION-windows-amd64.tar.gz ./template
+          tar -zcvf xctl.$VERSION-linux-amd64.tar.gz ./template
+          tar -zcvf xctl.$VERSION-darwin-amd64.tar.gz ./template
+          tar -zcvf xctl.$VERSION-darwin-amd64.tar.gz ./template
+
+      - name: Upload Darwin AMD64
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+          files: |
+            xctl.${{github.ref}}-windows-amd64.tar.gz
+            xctl.${{github.ref}}-linux-amd64.tar.gz
+            xctl.${{github.ref}}-darwin-amd64.tar.gz
+            xctl.${{github.ref}}-darwin-arm64.tar.gz
