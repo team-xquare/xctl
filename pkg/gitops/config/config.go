@@ -23,23 +23,16 @@ func SetCredential(c *Credential) error {
 		return err
 	}
 
-	f, err := os.Create(CredentialPath)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
 	data, err := json.MarshalIndent(c, "", "  ")
 	if err != nil {
 		return err
 	}
-	_, err = f.Write(data)
-	return err
+	return ioutil.WriteFile(CredentialPath, data, 0666)
 }
 
 func createCredentialDir() error {
 	if _, err := os.Stat(CredentialDir); os.IsNotExist(err) {
-		err := os.Mkdir(CredentialDir, os.ModeDir)
+		err := os.Mkdir(CredentialDir, 0777)
 		if err != nil {
 			return err
 		}
