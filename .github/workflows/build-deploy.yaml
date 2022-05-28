@@ -20,14 +20,14 @@ jobs:
         env:
           VERSION: ${{ github.ref }}
         run: |
-          GOOS=windows GOARCH=amd64 go build -o xctl.$VERSION-windows-amd64
-          GOOS=linux GOARCH=amd64 go build -o xctl.$VERSION-linux-amd64
-          GOOS=darwin GOARCH=amd64 go build -o xctl.$VERSION-darwin-amd64
-          GOOS=darwin GOARCH=arm64 go build -o xctl.$VERSION-darwin-arm64
-          tar -zcvf xctl.$VERSION-windows-amd64.tar.gz ./template
-          tar -zcvf xctl.$VERSION-linux-amd64.tar.gz ./template
-          tar -zcvf xctl.$VERSION-darwin-amd64.tar.gz ./template
-          tar -zcvf xctl.$VERSION-darwin-arm64.tar.gz ./template
+          GOOS=windows GOARCH=amd64 go build -o xctl$VERSION-windows-amd64
+          GOOS=linux GOARCH=amd64 go build -o xctl$VERSION-linux-amd64
+          GOOS=darwin GOARCH=amd64 go build -o xctl$VERSION-darwin-amd64
+          GOOS=darwin GOARCH=arm64 go build -o xctl$VERSION-darwin-amd64
+          tar -zcvf xctl$VERSION-windows-amd64.tar.gz ./template ./xctl$VERSION-windows-amd64
+          tar -zcvf xctl$VERSION-linux-amd64.tar.gz ./template ./xctl$VERSION-linux-amd64
+          tar -zcvf xctl$VERSION-darwin-amd64.tar.gz ./template ./xctl$VERSION-darwin-amd64
+          tar -zcvf xctl$VERSION-darwin-arm64.tar.gz ./template ./xctl$VERSION-darwin-amd64
 
       - name: Upload asset
         uses: softprops/action-gh-release@v1
@@ -35,7 +35,7 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         with:
           files: |
-            xctl.${{github.ref}}-windows-amd64.tar.gz
-            xctl.${{github.ref}}-linux-amd64.tar.gz
-            xctl.${{github.ref}}-darwin-amd64.tar.gz
-            xctl.${{github.ref}}-darwin-arm64.tar.gz
+            xctl${{github.ref}}-windows-amd64.tar.gz
+            xctl${{github.ref}}-linux-amd64.tar.gz
+            xctl${{github.ref}}-darwin-amd64.tar.gz
+            xctl${{github.ref}}-darwin-arm64.tar.gz
