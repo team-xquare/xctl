@@ -4,32 +4,17 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
-	"runtime"
+
+	cmdutil "github.com/xctl/pkg/cmd/util"
 )
 
 var (
-	CredentialDir  = getHomeDir() + "/.xctl"
+	CredentialDir  = cmdutil.GetHomeDir() + "/.xctl"
 	CredentialPath = CredentialDir + "/credential.json"
 )
 
 type Credential struct {
 	GithubToken string
-}
-
-func getHomeDir() string {
-	if runtime.GOOS == "windows" {
-		home := os.Getenv("HOMEDRIVE") + os.Getenv("HOMEPATH")
-		if home == "" {
-			home = os.Getenv("USERPROFILE")
-		}
-		return home
-	} else if runtime.GOOS == "linux" {
-		home := os.Getenv("XDG_CONFIG_HOME")
-		if home != "" {
-			return home
-		}
-	}
-	return os.Getenv("HOME")
 }
 
 func SetCredential(c *Credential) error {
