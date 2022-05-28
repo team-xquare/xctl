@@ -24,14 +24,14 @@ jobs:
         env:
           VERSION: ${{ steps.get_version.outputs.VERSION }}
         run: |
-          GOOS=windows GOARCH=amd64 go build -o xctl$VERSION-windows-amd64
-          GOOS=linux GOARCH=amd64 go build -o xctl$VERSION-linux-amd64
-          GOOS=darwin GOARCH=amd64 go build -o xctl$VERSION-darwin-amd64
-          GOOS=darwin GOARCH=arm64 go build -o xctl$VERSION-darwin-amd64
-          tar -zcvf xctl$VERSION-windows-amd64.tar.gz ./template ./xctl$VERSION-windows-amd64
-          tar -zcvf xctl$VERSION-linux-amd64.tar.gz ./template ./xctl$VERSION-linux-amd64
-          tar -zcvf xctl$VERSION-darwin-amd64.tar.gz ./template ./xctl$VERSION-darwin-amd64
-          tar -zcvf xctl$VERSION-darwin-arm64.tar.gz ./template ./xctl$VERSION-darwin-amd64
+          GOOS=windows GOARCH=amd64 go build -o xctl-$VERSION-windows-amd64
+          GOOS=linux GOARCH=amd64 go build -o xctl-$VERSION-linux-amd64
+          GOOS=darwin GOARCH=amd64 go build -o xctl-$VERSION-darwin-amd64
+          GOOS=darwin GOARCH=arm64 go build -o xctl-$VERSION-darwin-amd64
+          tar -zcvf xctl-$VERSION-windows-amd64.tar.gz ./template ./xctl-$VERSION-windows-amd64
+          tar -zcvf xctl-$VERSION-linux-amd64.tar.gz ./template ./xctl-$VERSION-linux-amd64
+          tar -zcvf xctl-$VERSION-darwin-amd64.tar.gz ./template ./xctl-$VERSION-darwin-amd64
+          tar -zcvf xctl-$VERSION-darwin-arm64.tar.gz ./template ./xctl-$VERSION-darwin-amd64
 
       - name: Upload asset
         uses: softprops/action-gh-release@v1
@@ -39,7 +39,7 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         with:
           files: |
-            xctl${{ steps.get_version.outputs.VERSION }}-windows-amd64.tar.gz
-            xctl${{ steps.get_version.outputs.VERSION }}-linux-amd64.tar.gz
-            xctl${{ steps.get_version.outputs.VERSION }}-darwin-amd64.tar.gz
-            xctl${{ steps.get_version.outputs.VERSION }}-darwin-arm64.tar.gz
+            xctl-${{ steps.get_version.outputs.VERSION }}-windows-amd64.tar.gz
+            xctl-${{ steps.get_version.outputs.VERSION }}-linux-amd64.tar.gz
+            xctl-${{ steps.get_version.outputs.VERSION }}-darwin-amd64.tar.gz
+            xctl-${{ steps.get_version.outputs.VERSION }}-darwin-arm64.tar.gz
