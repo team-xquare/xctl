@@ -20,7 +20,11 @@
 1. Get latest version tar.gz archive using curl
 
 ```bash
-sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.1.0/xctl-v0.1.0-linux-amd64.tar.gz > /tmp/xctl.tar.gz
+# macbook pro
+sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.1.0/xctl-v0.1.0-darwin-amd64.tar.gz > /tmp/xctl.tar.gz
+
+# macbook air
+sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.1.0/xctl-v0.1.0-darwin-arm64.tar.gz > /tmp/xctl.tar.gz
 ```
 
 2. Extract tar.gz file
@@ -33,8 +37,7 @@ sudo rm /tmp/xctl.tar.gz
 3. Install and setting credential
 
 ```bash
-# TODO: update macOS bin directory
-# sudo mv /tmp/xctl-v0.1.0-linux-amd64 /usr/local/bin/xctl
+sudo mv /tmp/xctl-v0.1.0-linux-amd64 /usr/local/bin/xctl
 mkdir $HOME/.xctl
 sudo chmod 0777 -R $HOME/.xctl
 sudo mv /tmp/template $HOME/.xctl/
