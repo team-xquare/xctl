@@ -73,7 +73,7 @@ func (c *applications) createTreeEntries(ctx context.Context) ([]*github.TreeEnt
 				return err
 			}
 
-			fileName := strings.Join(strings.Split(path, "/")[2:], "/")
+			fileName := strings.Join(strings.Split(strings.Split(path, ".xctl")[1], "/")[3:], "/")
 			content := buf.String()
 			buf.Reset()
 			var entryPath string

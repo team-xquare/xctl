@@ -58,7 +58,7 @@ func (c *applications) deleteTreeEntries(ctx context.Context) ([]*github.TreeEnt
 				path = strings.Replace(path, "\\", "/", -1)
 			}
 
-			fileName := strings.Join(strings.Split(path, "/")[2:], "/")
+			fileName := strings.Join(strings.Split(strings.Split(path, ".xctl")[1], "/")[3:], "/")
 			var entryPath string
 			if fileName == "app-template.yaml" {
 				entryPath = fmt.Sprintf("apps/templates/%s/%s",
