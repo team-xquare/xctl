@@ -68,7 +68,7 @@ sudo rm /tmp/xctl.tar.gz
 3. Install and setting credential
 
 ```bash
-sudo mv /tmp/xctl-v0.1.0-linux-amd64 /usr/local/bin/xctl
+sudo mv /tmp/xctl-v0.2.0-linux-amd64 /usr/local/bin/xctl
 mkdir $HOME/.xctl
 sudo chmod 0777 -R $HOME/.xctl
 sudo mv /tmp/template $HOME/.xctl/
