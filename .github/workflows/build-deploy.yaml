@@ -31,7 +31,7 @@ jobs:
           tar -zcvf xctl-$VERSION-windows-amd64.tar.gz ./template ./xctl-$VERSION-windows-amd64
           tar -zcvf xctl-$VERSION-linux-amd64.tar.gz ./template ./xctl-$VERSION-linux-amd64
           tar -zcvf xctl-$VERSION-darwin-amd64.tar.gz ./template ./xctl-$VERSION-darwin-amd64
-          tar -zcvf xctl-$VERSION-darwin-arm64.tar.gz ./template ./xctl-$VERSION-darwin-amd64
+          tar -zcvf xctl-$VERSION-darwin-arm64.tar.gz ./template ./xctl-$VERSION-darwin-ard64
 
       - name: Upload asset
         uses: softprops/action-gh-release@v1
