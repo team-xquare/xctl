@@ -16,5 +16,5 @@ spec:
     permitInsecure: true  
     {{`{{end}}`}}
     services:
-      - name: {{`{{.Values.app}}`}}-service
+      - name: {{`{{.Values.app.fullName}}`}}-service
         port: 8080
