@@ -21,10 +21,10 @@
 
 ```bash
 # macbook pro
-sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.1.0/xctl-v0.1.0-darwin-amd64.tar.gz > /tmp/xctl.tar.gz
+sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.2.0/xctl-v0.2.0-darwin-amd64.tar.gz > /tmp/xctl.tar.gz
 
 # macbook air
-sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.1.0/xctl-v0.1.0-darwin-arm64.tar.gz > /tmp/xctl.tar.gz
+sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.2.0/xctl-v0.2.0-darwin-arm64.tar.gz > /tmp/xctl.tar.gz
 ```
 
 2. Extract tar.gz file
@@ -50,7 +50,7 @@ xctl set credential -t <xquare-admin_github_token>
 1. Get latest version tar.gz archive using curl
 
 ```bash
-sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.1.0/xctl-v0.1.0-linux-amd64.tar.gz > /tmp/xctl.tar.gz
+sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.2.0/xctl-v0.2.0-linux-amd64.tar.gz > /tmp/xctl.tar.gz
 ```
 
 2. Extract tar.gz file
