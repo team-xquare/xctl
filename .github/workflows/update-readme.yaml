@@ -17,8 +17,8 @@ jobs:
 
       - name: Update Readme In Checked-Out Code
         run: |
-          sed -i "s@\(https://github.com/team-xquare/xctl/releases/download/\).*\(/xctl-\).*\(-[a-zA-Z]*-[a-zA-Z0-9]*\.tar\.gz\)@\1${{ steps.get_version.outputs.VERSION }}\2${{ steps.get_version.outputs.VERSION }}\3@g" ${GITHUB_WORKSPACE}/README.md
-          sed -i "s@\(/tmp/xctl-\).*\(-[a-zA-Z]*-[a-zA-Z0-9]*\)@\1${{steps.get_version.outputs.VERSION}}\2@g" ${GITHUB_WORKSPACE}/README.md
+          sed -E -i "s@(https://github.com/team-xquare/xctl/releases/download/).*(/xctl-).*(-(linux|windows|darwin)-(amd64|arm64)\.tar\.gz)@\1${{steps.get_version.outputs.VERSION}}\2v${{steps.get_version.outputs.VERSION}}\3@g" ${GITHUB_WORKSPACE}/README.md
+          sed -E -i "s@(/tmp/xctl-).*(-(linux|windows|darwin)-(amd64|arm64))@\1${{steps.get_version.outputs.VERSION}}\2@g" ${GITHUB_WORKSPACE}/README.md
 
       - name: Commit The New Version Reamde
         uses: stefanzweifel/git-auto-commit-action@v4
