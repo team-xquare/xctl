@@ -43,6 +43,7 @@ or
 
 sudo mv /tmp/xctl-v0.2.7-darwin-arm64 /usr/local/bin/xctl
 
+sudo rm -rf  $HOME/.xctl/
 mkdir $HOME/.xctl
 sudo mv /tmp/template $HOME/.xctl/
 # You can get github token from the XQUARE notion page.
@@ -68,6 +69,8 @@ sudo rm /tmp/xctl.tar.gz
 
 ```bash
 sudo mv /tmp/xctl-v0.2.7-linux-amd64 /usr/local/bin/xctl
+
+sudo rm -rf  $HOME/.xctl/
 mkdir $HOME/.xctl
 sudo mv /tmp/template $HOME/.xctl/
 # You can get github token from the XQUARE notion page.
