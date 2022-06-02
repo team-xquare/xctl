@@ -61,9 +61,9 @@ func getClientFromCredential() (*github.Client, error) {
 
 func selectRepository(environment string) string {
 	switch environment {
-	case api.Backend:
+	case api.Staging:
 		return StagingRepo
-	case api.Frontend:
+	case api.Production:
 		return ProductionRepo
 	default:
 		return StagingRepo
