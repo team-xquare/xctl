@@ -31,7 +31,7 @@ func CheckApplicationType(t string) (string, error) {
 }
 
 const (
-	Production = "production"
+	Production = "prod"
 	Staging    = "staging"
 )
 
