@@ -21,10 +21,10 @@
 
 ```bash
 # macbook pro
-sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.2.6/xctl-v0.2.6-darwin-amd64.tar.gz > /tmp/xctl.tar.gz
+sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.2.7/xctl-v0.2.7-darwin-amd64.tar.gz > /tmp/xctl.tar.gz
 
 # macbook air
-sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.2.6/xctl-v0.2.6-darwin-arm64.tar.gz > /tmp/xctl.tar.gz
+sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.2.7/xctl-v0.2.7-darwin-arm64.tar.gz > /tmp/xctl.tar.gz
 ```
 
 2. Extract tar.gz file
@@ -37,11 +37,11 @@ sudo rm /tmp/xctl.tar.gz
 3. Install and setting credential
 
 ```bash
-sudo mv /tmp/xctl-v0.2.6-darwin-amd64 /usr/local/bin/xctl
+sudo mv /tmp/xctl-v0.2.7-darwin-amd64 /usr/local/bin/xctl
 
 or
 
-sudo mv /tmp/xctl-v0.2.6-darwin-arm64 /usr/local/bin/xctl
+sudo mv /tmp/xctl-v0.2.7-darwin-arm64 /usr/local/bin/xctl
 
 mkdir $HOME/.xctl
 sudo mv /tmp/template $HOME/.xctl/
@@ -54,7 +54,7 @@ xctl set credential -t <xquare-admin_github_token>
 1. Get latest version tar.gz archive using curl
 
 ```bash
-sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.2.6/xctl-v0.2.6-linux-amd64.tar.gz > /tmp/xctl.tar.gz
+sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.2.7/xctl-v0.2.7-linux-amd64.tar.gz > /tmp/xctl.tar.gz
 ```
 
 2. Extract tar.gz file
@@ -67,7 +67,7 @@ sudo rm /tmp/xctl.tar.gz
 3. Install and setting credential
 
 ```bash
-sudo mv /tmp/xctl-v0.2.6-linux-amd64 /usr/local/bin/xctl
+sudo mv /tmp/xctl-v0.2.7-linux-amd64 /usr/local/bin/xctl
 mkdir $HOME/.xctl
 sudo mv /tmp/template $HOME/.xctl/
 # You can get github token from the XQUARE notion page.
