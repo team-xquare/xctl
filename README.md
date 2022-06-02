@@ -21,10 +21,10 @@
 
 ```bash
 # macbook pro
-sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.2.4/xctl-vv0.2.4-darwin-amd64.tar.gz > /tmp/xctl.tar.gz
+sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.2.4/xctl-v0.2.4-darwin-amd64.tar.gz > /tmp/xctl.tar.gz
 
 # macbook air
-sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.2.4/xctl-vv0.2.4-darwin-arm64.tar.gz > /tmp/xctl.tar.gz
+sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.2.4/xctl-v0.2.4-darwin-arm64.tar.gz > /tmp/xctl.tar.gz
 ```
 
 2. Extract tar.gz file
@@ -44,7 +44,6 @@ or
 sudo mv /tmp/xctl-v0.2.4-darwin-arm64 /usr/local/bin/xctl
 
 mkdir $HOME/.xctl
-sudo chmod 0777 -R $HOME/.xctl
 sudo mv /tmp/template $HOME/.xctl/
 # You can get github token from the XQUARE notion page.
 xctl set credential -t <xquare-admin_github_token>
@@ -55,7 +54,7 @@ xctl set credential -t <xquare-admin_github_token>
 1. Get latest version tar.gz archive using curl
 
 ```bash
-sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.2.4/xctl-vv0.2.4-linux-amd64.tar.gz > /tmp/xctl.tar.gz
+sudo curl -L /tmp https://github.com/team-xquare/xctl/releases/download/v0.2.4/xctl-v0.2.4-linux-amd64.tar.gz > /tmp/xctl.tar.gz
 ```
 
 2. Extract tar.gz file
@@ -70,7 +69,6 @@ sudo rm /tmp/xctl.tar.gz
 ```bash
 sudo mv /tmp/xctl-v0.2.4-linux-amd64 /usr/local/bin/xctl
 mkdir $HOME/.xctl
-sudo chmod 0777 -R $HOME/.xctl
 sudo mv /tmp/template $HOME/.xctl/
 # You can get github token from the XQUARE notion page.
 xctl set credential -t <xquare-admin_github_token>
