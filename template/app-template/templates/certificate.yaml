@@ -8,4 +8,4 @@ spec:
   issuerRef:
     name: letsencrypt-{{`{{ .Values.app.env }}`}}
     kind: ClusterIssuer
-  secretName: {{`{{ .Values.app.fullName }}`}}-certificate
+  secretName: {{`{{ .Values.app.name }}`}}
