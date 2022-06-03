@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{`{{ .Values.app.fullName }}`}}-deployment
+  name: {{`{{ .Values.app.name }}`}}
   labels:
-    app: {{`{{ .Values.app.fullName }}`}}-deployment
+    app: {{`{{ .Values.app.name }}`}}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{`{{ .Values.app.fullName }}`}}
+      app: {{`{{ .Values.app.name }}`}}
   template:
     metadata:
       labels:
-        app: {{`{{ .Values.app.fullName }}`}}
+        app: {{`{{ .Values.app.name }}`}}
     spec:
       containers:
-        - name:  {{`{{ .Values.app.fullName }}`}}    
+        - name:  {{`{{ .Values.app.name }}`}}    
           image: {{`{{ .Values.container.image.registry }}/xquare/{{.Values.app.name}}-{{.Values.app.type}}:{{ .Values.container.image.version }}`}}
           imagePullPolicy: Always
           ports:

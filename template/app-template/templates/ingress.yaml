@@ -1,20 +1,17 @@
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
 metadata:
-  name: {{`{{.Values.app.fullName}}-ingress`}}
+  name: {{`{{.Values.app.name}}`}}
 
 spec:
   virtualhost:
     fqdn: {{`{{ .Values.host }}`}}
     tls:
-      secretName: {{`{{ .Values.app.fullName }}`}}-certificate
+      secretName: {{`{{ .Values.app.name }}`}}
 
   routes:
   - conditions:
     - prefix: {{`{{.Values.ingress.prefix}}`}}
-    {{`{{if eq .Values.app.type "staging"}}`}}
-    permitInsecure: true  
-    {{`{{end}}`}}
     services:
-      - name: {{`{{.Values.app.fullName}}`}}-service
+      - name: {{`{{.Values.app.name}}`}}
         port: 8080
