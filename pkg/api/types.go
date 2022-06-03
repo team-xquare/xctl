@@ -14,8 +14,8 @@ type Application struct {
 }
 
 const (
-	Backend  = "backend"
-	Frontend = "frontend"
+	Backend  = "be"
+	Frontend = "fe"
 )
 
 func CheckApplicationType(t string) (string, error) {
@@ -32,7 +32,7 @@ func CheckApplicationType(t string) (string, error) {
 
 const (
 	Production = "prod"
-	Staging    = "staging"
+	Staging    = "stag"
 )
 
 func CheckApplicationEnvironment(e string) (string, error) {
