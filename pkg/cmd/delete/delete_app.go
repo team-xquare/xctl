@@ -70,6 +70,8 @@ func (o *DeleteAppOptions) Complete(cmd *cobra.Command, args []string) error {
 	if !strings.HasPrefix(name, "app-") {
 		name = "app-" + name
 	}
+
+	o.Type, err = api.CheckApplicationType(o.Type)
 	if !strings.HasSuffix(name, "-"+o.Type) {
 		name = name + "-" + o.Type
 	}
@@ -79,7 +81,6 @@ func (o *DeleteAppOptions) Complete(cmd *cobra.Command, args []string) error {
 		o.Command = args[1:]
 	}
 
-	o.Type, err = api.CheckApplicationType(o.Type)
 	if err != nil {
 		return err
 	}
