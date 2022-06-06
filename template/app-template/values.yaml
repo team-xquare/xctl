@@ -13,8 +13,4 @@ container:
 ingress:
   prefix: {{.Prefix}}
 
-{{if eq .Environment "prod"}}
 host: {{.Host}}
-{{else}}
-host: {{.Environment}}-{{.Host}}
-{{end}}

@@ -48,7 +48,7 @@ type CreateAppOptions struct {
 func NewCreateAppOption() *CreateAppOptions {
 	return &CreateAppOptions{
 		Type:          "backend",
-		Host:          "api.xquare.app",
+		Host:          "app.xquare.app",
 		ImageRegistry: "registry.hub.docker.com",
 		ImageTag:      "latest",
 		/* 도커 파일의 외부 포트와 연결되는 포트.
@@ -74,7 +74,7 @@ func NewCmdCreateApp() *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&o.Type, "type", "t", o.Type, "The type of service. default is backend")
-	cmd.Flags().StringVar(&o.Host, "host", o.Host, "The host name of service. Default is api.xquare.app")
+	cmd.Flags().StringVar(&o.Host, "host", o.Host, "The host name of service. Default is app.xquare.app")
 	cmd.Flags().StringVarP(&o.ImageRegistry, "registry", "r", o.ImageRegistry, "The container registry url. Default is registry.hub.docker.com")
 	cmd.Flags().StringVarP(&o.Environment, "environment", "e", o.Environment, "The environment to create an application. Default is staging")
 	cmd.Flags().StringVar(&o.ImageTag, "tag", o.ImageTag, "The tag name of a image at start. Default is latest")
@@ -102,6 +102,10 @@ func (o *CreateAppOptions) Complete(cmd *cobra.Command, args []string) error {
 	o.Environment, err = api.CheckApplicationEnvironment(o.Environment)
 	if err != nil {
 		return err
+	}
+
+	if o.Environment == api.Staging {
+		o.Host = fmt.Sprintf("%s-%s", api.Staging, o.Host)
 	}
 
 	client, err := github.NewGithubClient(o.Environment)
