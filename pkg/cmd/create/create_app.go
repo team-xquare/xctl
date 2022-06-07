@@ -48,7 +48,6 @@ type CreateAppOptions struct {
 func NewCreateAppOption() *CreateAppOptions {
 	return &CreateAppOptions{
 		Type:          "backend",
-		Host:          "app.xquare.app",
 		ImageRegistry: "registry.hub.docker.com",
 		ImageTag:      "latest",
 		/* 도커 파일의 외부 포트와 연결되는 포트.
@@ -74,7 +73,6 @@ func NewCmdCreateApp() *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&o.Type, "type", "t", o.Type, "The type of service. default is backend")
-	cmd.Flags().StringVar(&o.Host, "host", o.Host, "The host name of service. Default is app.xquare.app")
 	cmd.Flags().StringVarP(&o.ImageRegistry, "registry", "r", o.ImageRegistry, "The container registry url. Default is registry.hub.docker.com")
 	cmd.Flags().StringVarP(&o.Environment, "environment", "e", o.Environment, "The environment to create an application. Default is staging")
 	cmd.Flags().StringVar(&o.ImageTag, "tag", o.ImageTag, "The tag name of a image at start. Default is latest")
@@ -172,7 +170,6 @@ func (o *CreateAppOptions) createApplication() (*api.Application, error) {
 	app := &api.Application{
 		Name:          o.Name,
 		Type:          o.Type,
-		Host:          o.Host,
 		ImageRegistry: o.ImageRegistry,
 		ImageTag:      o.ImageTag,
 		ContainerPort: o.ContainerPort,
