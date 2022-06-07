@@ -12,5 +12,4 @@ container:
 
 ingress:
   prefix: {{.Prefix}}
-
-host: {{.Host}}
+  
