@@ -96,19 +96,10 @@ func (o *GetAppOptions) printApplications(apps []*api.Application) {
 	w.Init(os.Stdout, 0, 0, 1, ' ', tabwriter.Debug)
 	fmt.Fprintln(w, "\t Name\t Base Url\t Image Version\t")
 	for _, app := range apps {
-		var host string
-		if app.Type == api.Backend {
-			host = "api.xquare.app"
-		} else if app.Type == api.Frontend {
-			host = "webview.xquare.app"
-		}
-		if app.Environment != api.Production {
-			host = app.Environment + "-" + host
-		}
 		fmt.Fprintf(w, "\t app-%s-%s\t %s\t %s\t\n",
 			app.Name,
 			app.Type,
-			host+app.Prefix,
+			app.Host+app.Prefix,
 			app.ImageTag)
 	}
 	w.Flush()

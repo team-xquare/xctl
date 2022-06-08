@@ -4,6 +4,7 @@ app:
   type: {{.Type}}
   env: {{.Environment}}
 
+
 container:
   port: {{.ContainerPort}}
   image:
@@ -11,5 +12,6 @@ container:
     version: {{.ImageTag}}
 
 ingress:
+  host: {{.Host}}
   prefix: {{.Prefix}}
   

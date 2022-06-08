@@ -41,6 +41,7 @@ type CreateAppOptions struct {
 	CommitMessage string
 	Environment   string
 	Prefix        string
+	Subdomain     string
 
 	Gitops gitops.GitopsInterface
 }
@@ -50,6 +51,8 @@ func NewCreateAppOption() *CreateAppOptions {
 		Type:          "backend",
 		ImageRegistry: "registry.hub.docker.com",
 		ImageTag:      "latest",
+		Host:          "xquare.app",
+		Subdomain:     "api",
 		/* 도커 파일의 외부 포트와 연결되는 포트.
 		예를 들어 리액트 애플리케이션을 배포하는 경우, 리액트의 기본 포트인 3000을 지정해주면 된다.*/
 		ContainerPort: 8080,
@@ -74,6 +77,8 @@ func NewCmdCreateApp() *cobra.Command {
 
 	cmd.Flags().StringVarP(&o.Type, "type", "t", o.Type, "The type of service. default is backend")
 	cmd.Flags().StringVarP(&o.ImageRegistry, "registry", "r", o.ImageRegistry, "The container registry url. Default is registry.hub.docker.com")
+	cmd.Flags().StringVar(&o.Host, "host", o.Host, "The host name of service. Default is xquare.app")
+	cmd.Flags().StringVarP(&o.Subdomain, "subdomain", "s", o.Subdomain, "The subdmain name of service. Default is api")
 	cmd.Flags().StringVarP(&o.Environment, "environment", "e", o.Environment, "The environment to create an application. Default is staging")
 	cmd.Flags().StringVar(&o.ImageTag, "tag", o.ImageTag, "The tag name of a image at start. Default is latest")
 	cmd.Flags().StringVarP(&o.Prefix, "prefix", "p", o.Prefix, "The prefix for service routing. Default is /")
@@ -87,6 +92,7 @@ func (o *CreateAppOptions) Complete(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+
 	o.Name = name
 	if len(args) > 1 {
 		o.Command = args[1:]
@@ -102,8 +108,10 @@ func (o *CreateAppOptions) Complete(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	if o.Environment == api.Staging {
-		o.Host = fmt.Sprintf("%s-%s", api.Staging, o.Host)
+	if o.Environment != api.Production {
+		o.Host = fmt.Sprintf("%s-%s.%s", o.Environment, o.Subdomain, o.Host)
+	} else {
+		o.Host = fmt.Sprintf("%s.%s", o.Subdomain, o.Host)
 	}
 
 	client, err := github.NewGithubClient(o.Environment)
@@ -170,6 +178,7 @@ func (o *CreateAppOptions) createApplication() (*api.Application, error) {
 	app := &api.Application{
 		Name:          o.Name,
 		Type:          o.Type,
+		Host:          o.Host,
 		ImageRegistry: o.ImageRegistry,
 		ImageTag:      o.ImageTag,
 		ContainerPort: o.ContainerPort,

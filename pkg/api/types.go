@@ -4,6 +4,7 @@ import "fmt"
 
 type Application struct {
 	Name          string
+	Host          string
 	ImageRegistry string
 	ImageTag      string
 	ContainerPort int32
