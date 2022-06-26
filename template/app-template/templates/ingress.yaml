@@ -1,12 +1,12 @@
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
 metadata:
-  name: { { .Values.app.name } }
+  name: {{`{{ .Values.app.name }}`}}
 spec:
   ingressClassName: contour
   routes:
     - conditions:
-        - prefix: { { .Values.ingress.prefix } }
+        - prefix: {{`{{ .Values.ingress.prefix }}`}}
       services:
-        - name: { { .Values.app.name } }
+        - name: {{`{{ .Values.app.name }}`}}
           port: 80
