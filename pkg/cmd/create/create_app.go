@@ -49,7 +49,7 @@ type CreateAppOptions struct {
 func NewCreateAppOption() *CreateAppOptions {
 	return &CreateAppOptions{
 		Type:          "backend",
-		ImageRegistry: "registry.hub.docker.com",
+		ImageRegistry: "718436679669.dkr.ecr.ap-northeast-2.amazonaws.com",
 		ImageTag:      "latest",
 		Host:          "xquare.app",
 		Subdomain:     "api",
