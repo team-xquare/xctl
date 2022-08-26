@@ -100,8 +100,9 @@ xctl set credential -t <xquare-admin_github_token>
 
 ```
 	type:          "backend",
-	host:          "api.xquare.app",
-	image registry: "registry.hub.docker.com",
+	host:          "xquare.app",
+	subdomain:	"stag-api"
+	image registry: "718436679669.dkr.ecr.ap-northeast-2.amazonaws.com",
 	image tag:      "latest",
 	container port: 8080,
 	environment:   "staging",
