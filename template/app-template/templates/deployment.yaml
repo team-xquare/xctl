@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name:  {{`{{ .Values.app.name }}`}}    
-          image: {{`{{ .Values.container.image.registry }}/xquare/{{.Values.app.name}}-{{.Values.app.type}}:{{ .Values.container.image.version }}`}}
+          image: {{`{{ .Values.container.image.registry }}/{{.Values.app.name}}-{{.Values.app.type}}:{{ .Values.container.image.version }}`}}
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: {{`{{ .Values.container.port}}`}}
