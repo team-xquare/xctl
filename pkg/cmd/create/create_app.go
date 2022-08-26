@@ -52,7 +52,7 @@ func NewCreateAppOption() *CreateAppOptions {
 		ImageRegistry: "718436679669.dkr.ecr.ap-northeast-2.amazonaws.com",
 		ImageTag:      "latest",
 		Host:          "xquare.app",
-		Subdomain:     "api",
+		Subdomain:     "stag-api",
 		/* 도커 파일의 외부 포트와 연결되는 포트.
 		예를 들어 리액트 애플리케이션을 배포하는 경우, 리액트의 기본 포트인 3000을 지정해주면 된다.*/
 		ContainerPort: 8080,
@@ -76,9 +76,9 @@ func NewCmdCreateApp() *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&o.Type, "type", "t", o.Type, "The type of service. default is backend")
-	cmd.Flags().StringVarP(&o.ImageRegistry, "registry", "r", o.ImageRegistry, "The container registry url. Default is registry.hub.docker.com")
+	cmd.Flags().StringVarP(&o.ImageRegistry, "registry", "r", o.ImageRegistry, "The container registry url. Default is 718436679669.dkr.ecr.ap-northeast-2.amazonaws.com")
 	cmd.Flags().StringVar(&o.Host, "host", o.Host, "The host name of service. Default is xquare.app")
-	cmd.Flags().StringVarP(&o.Subdomain, "subdomain", "s", o.Subdomain, "The subdmain name of service. Default is api")
+	cmd.Flags().StringVarP(&o.Subdomain, "subdomain", "s", o.Subdomain, "The subdmain name of service. Default is stag-api")
 	cmd.Flags().StringVarP(&o.Environment, "environment", "e", o.Environment, "The environment to create an application. Default is staging")
 	cmd.Flags().StringVar(&o.ImageTag, "tag", o.ImageTag, "The tag name of a image at start. Default is latest")
 	cmd.Flags().StringVarP(&o.Prefix, "prefix", "p", o.Prefix, "The prefix for service routing. Default is /")
