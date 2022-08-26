@@ -114,11 +114,11 @@ xctl set credential -t <xquare-admin_github_token>
 ```bash
 # Create frontend application named "eungyeol" to staging environment
 # host name is "eungyeol.xquare.app" and port number 3000
-xctl create app eungyeol -t frontend --host eungyeol.xquare.app --port 3000
+xctl create app eungyeol -t fe --subdomain eungyeol --port 3000
 
 # Create backend application named "notification" to production environment
 # host name is "api.xquare.app", prefix is "/notification",
-xctl create app notification -p /notification -e production -t backend
+xctl create app notification -p /notification -e production -t be
 
 or
 
