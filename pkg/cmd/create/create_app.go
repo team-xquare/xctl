@@ -108,11 +108,7 @@ func (o *CreateAppOptions) Complete(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	if o.Environment != api.Production {
-		o.Host = fmt.Sprintf("%s-%s.%s", o.Environment, o.Subdomain, o.Host)
-	} else {
-		o.Host = fmt.Sprintf("%s.%s", o.Subdomain, o.Host)
-	}
+	o.Host = fmt.Sprintf("%s.%s", o.Subdomain, o.Host)
 
 	client, err := github.NewGithubClient(o.Environment)
 	if err != nil {
